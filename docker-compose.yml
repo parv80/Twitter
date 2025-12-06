@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   mongo:
     image: mongo:6
@@ -8,8 +9,9 @@ services:
     networks:
       - appnet
 
-  server:
+  backend:
     build: ./server
+    container_name: twitter-backend
     env_file:
       - ./server/.env
     ports:
@@ -19,12 +21,13 @@ services:
     networks:
       - appnet
 
-  client:
+  frontend:
     build: ./client
+    container_name: twitter-frontend
     ports:
-      - "80:80"
+      - "3005:80"
     depends_on:
-      - server
+      - backend
     networks:
       - appnet
 
@@ -33,4 +36,3 @@ volumes:
 
 networks:
   appnet:
-    driver: bridge
